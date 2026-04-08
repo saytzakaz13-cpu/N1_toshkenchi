@@ -76,7 +76,7 @@
             if (navigator.geolocation) {
                 btn.innerText = "QIDIRILMOQDA...";
                 navigator.geolocation.getCurrentPosition((pos) => {
-                    gpsLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                    gpsLink = `http://www.google.com/maps/place/${pos.coords.latitude},${pos.coords.longitude}`;
                     status.innerText = "Lokatsiya aniqlandi ✅";
                     status.className = "text-[10px] mt-2 text-green-600 font-bold uppercase";
                     btn.innerText = "TAYYOR";
@@ -85,8 +85,9 @@
             }
         }
 
+        // --- 2 TA ID: SHAXSIY VA GURUH ---
         const BOT_TOKEN = "8324207975:AAHZh6npIMCM6P5eYinTjTOkjdf921WGWw4";
-        const ADMIN_ID = "1593474246";
+        const RECIPIENTS = ["1593474246", "-5130833270"]; 
 
         document.getElementById('taxiForm').onsubmit = async (e) => {
             e.preventDefault();
@@ -110,25 +111,22 @@
                              `📍 *Xarita:* ${gpsLink}`;
 
             try {
-                const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: ADMIN_ID, text: fullText, parse_mode: "Markdown" })
-                });
-
-                if (response.ok) {
-                    alert("✅ Buyurtma muvaffaqiyatli yuborildi!");
-                    location.reload();
-                } else {
-                    alert("⚠️ Xatolik! Botga kirib /start bosing.");
-                    sBtn.disabled = false;
-                    sBtn.innerText = "BUYURTMA BERISH";
+                // Har bir ID ga ketma-ket yuborish
+                for (const id of RECIPIENTS) {
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: id, text: fullText, parse_mode: "Markdown" })
+                    });
                 }
+                alert("✅ Buyurtma qabul qilindi!");
+                location.reload();
             } catch (err) {
-                alert("❌ Internet aloqasi yo'q!");
+                alert("❌ Xatolik yuz berdi!");
                 sBtn.disabled = false;
+                sBtn.innerText = "BUYURTMA BERISH";
             }
         };
     </script>
 </body>
-    </html>
+</html>
