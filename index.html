@@ -16,7 +16,9 @@
         <h1 class="text-4xl font-black italic tracking-tighter text-gray-900 uppercase">
             N1_TOSHKENCHI
         </h1>
-        <p class="text-[10px] font-bold text-gray-800 mt-2 uppercase tracking-widest">Taksi va Pochta xizmati</p>
+        <p class="text-[10px] font-bold text-gray-800 mt-2 uppercase tracking-widest">
+            taxi odam va pochta xizmati
+        </p>
     </div>
 
     <div class="flex items-center justify-center p-4 py-10">
@@ -26,7 +28,7 @@
                 <input type="text" id="userName" placeholder="Ism va Telefon" required 
                 class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-yellow-400">
 
-                <input type="text" id="userDest" placeholder="Qayerga borasiz yoki Pochta qayerga?" required 
+                <input type="text" id="userDest" placeholder="Qayerdan qayerga?" required 
                 class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:border-yellow-400">
 
                 <label class="block text-xs font-bold text-gray-500 ml-2 uppercase">Xizmat turini tanlang:</label>
@@ -97,13 +99,12 @@
             const tarif = document.getElementById('userTarif').value;
             const msg = document.getElementById('userMsg').value || "Yo'q";
 
-            // Agar pochta tanlangan bo'lsa, xabar sarlavhasini o'zgartiramiz
             const isPochta = tarif.includes("Pochta");
             const header = isPochta ? "📦 YANGI POCHTA BUYURTMASI" : "🚖 YANGI TAKSI BUYURTMASI";
 
             const fullText = `*${header}*\n\n` +
                              `👤 *Mijoz:* ${name}\n` +
-                             `📍 *Manzil:* ${dest}\n` +
+                             `📍 *Yo'nalish:* ${dest}\n` +
                              `🏷️ *Xizmat:* ${tarif}\n` +
                              `💬 *Izoh:* ${msg}\n\n` +
                              `📍 *Xarita:* ${gpsLink}`;
@@ -119,7 +120,7 @@
                     alert("✅ Buyurtma muvaffaqiyatli yuborildi!");
                     location.reload();
                 } else {
-                    alert("⚠️ Xato! Bot egasi botga kirib /start bosganini tekshiring.");
+                    alert("⚠️ Xatolik! Botga kirib /start bosing.");
                     sBtn.disabled = false;
                     sBtn.innerText = "BUYURTMA BERISH";
                 }
@@ -130,4 +131,4 @@
         };
     </script>
 </body>
-                    </html>
+    </html>
