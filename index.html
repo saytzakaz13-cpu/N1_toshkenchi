@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N1_toshkenchi | Taksi Buyurtma</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 font-sans">
 
+    <div class="bg-yellow-400 p-6 text-center shadow-lg">
+        <h1 class="text-3xl font-black text-gray-900 tracking-tighter italic">
+            <i class="fas fa-taxi mr-2"></i>N1_TOSHKENCHI
+        </h1>
+        <p class="text-xs font-bold text-gray-800 mt-1 uppercase tracking-widest">Viloyatlararo tezkor xizmat</p>
+    </div>
+
+    <div class="flex items-center justify-center p-4 py-10">
+        <div class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden">
+            <div class="p-8">
+                <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Buyurtma Berish</h2>
+                
+                <form id="orderForm" class="space-y-4">
+                    <div class="relative">
+                        <i class="fas fa-user absolute left-4 top-4 text-gray-400"></i>
+                        <input type="text" id="name" placeholder="Ismingiz va Telefoningiz" required 
+                        class="w-full pl-12 p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-yellow-400 transition-all">
+                    </div>
+
+                    <div class="relative">
+                        <i class="fas fa-map-marker-alt absolute left-4 top-4 text-gray-400"></i>
+                        <input type="text" id="destination" placeholder="Qayerga borasiz?" required 
+                        class="w-full pl-12 p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-yellow-400 transition-all">
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="tarif" value="Ekonom" checked class="hidden peer">
+                            <div class="text-center p-3 border-2 border-gray-100 rounded-xl peer-checked:border-yellow-400 peer-checked:bg-yellow-50 font-bold text-xs text-gray-600">Ekonom</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="tarif" value="Komfort" class="hidden peer">
+                            <div class="text-center p-3 border-2 border-gray-100 rounded-xl peer-checked:border-yellow-400 peer-checked:bg-yellow-50 font-bold text-xs text-gray-600">Komfort</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="tarif" value="Biznes" class="hidden peer">
+                            <div class="text-center p-3 border-2 border-gray-100 rounded-xl peer-checked:border-yellow-400 peer-checked:bg-yellow-50 font-bold text-xs text-gray-600">Biznes</div>
+                        </label>
+                    </div>
+
+                    <div class="p-4 bg-yellow-50 rounded-2xl border-2 border-dashed border-yellow-200 text-center">
+                        <button type="button" onclick="getLocation()" id="locBtn" class="bg-gray-900 text-yellow-400 px-6 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 transition">
+                            <i class="fas fa-crosshairs mr-2"></i> LOKATSIYANI ANIQLASH
+                        </button>
+                        <p id="locLabel" class="text-[10px] mt-2 text-gray-400 font-bold uppercase tracking-wider italic">Lokatsiya aniqlanmagan</p>
+                    </div>
+
+                    <textarea id="comment" placeholder="Izoh (masalan: 2 ta yuk sumkam bor, odam soni...)" 
+                    class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl h-24 outline-none focus:border-yellow-400"></textarea>
+
+                    <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-black py-5 rounded-2xl text-xl shadow-xl transform active:scale-95 transition-all">
+                        HAYDOVCHI TOPISH
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center pb-8 text-gray-400 text-sm">
+        © 2026 N1_toshkenchi tizimi
+    </footer>
+
+    <script>
+        let userGps = "📍 Lokatsiya yuborilmadi";
+
+        function getLocation() {
+            const btn = document.getElementById('locBtn');
+            const label = document.getElementById('locLabel');
+            if (navigator.geolocation) {
+                btn.innerText = "QIDIRILMOQDA...";
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    userGps = `https://www.google.com/maps?q=${lat},${lon}`;
+                    label.innerText = "LOKATSIYA ANIQLANDI ✅";
+                    label.className = "text-[10px] mt-2 text-green-600 font-bold uppercase tracking-wider";
+                    btn.innerText = "LOKATSIYA TAYYOR";
+                    btn.className = "bg-green-600 text-white px-6 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 transition";
+                }, () => {
+                    label.innerText = "RUXSAT BERILMADI ❌";
+                    btn.innerText = "LOKATSIYANI QAYTA URINISH";
+                });
+            }
+        }
+
+        // MA'LUMOTLAR
+        const TOKEN = "8324207975:AAHZh6npIMCM6P5eYinTjTOkjdf921WGWw4";
+        const CHAT_ID = "8514630685";
+
+        document.getElementById('orderForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const dest = document.getElementById('destination').value;
+            const tarif = document.querySelector('input[name="tarif"]:checked').value;
+            const comment = document.getElementById('comment').value || "Yo'q";
+
+            const message = `
+🚖 **YANGI BUYURTMA (N1_TOSHKENCHI)**
+
+👤 **Mijoz:** ${name}
+📍 **Qayerga:** ${dest}
+🚕 **Tarif:** ${tarif}
+💬 **Izoh:** ${comment}
+
+🗺 **Mijoz lokatsiyasi (Google Maps):**
+${userGps}
+            `;
+
+            try {
+                const res = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: message,
+                        parse_mode: "Markdown"
+                    })
+                });
+
+                if (res.ok) {
+                    alert("✅ Buyurtma N1_toshkenchi haydovchilariga yuborildi! Tez orada bog'lanishadi.");
+                    location.reload();
+                } else {
+                    alert("⚠️ Xatolik yuz berdi. Bot sozlamalarini tekshiring.");
+                }
+            } catch (err) {
+                alert("❌ Internet aloqasini tekshiring.");
+            }
+        };
+    </script>
+</body>
+                          </html>
