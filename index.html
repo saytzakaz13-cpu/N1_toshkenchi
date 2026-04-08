@@ -13,39 +13,42 @@
         <h1 class="text-3xl font-black italic text-gray-900 uppercase tracking-tighter">
             <i class="fas fa-taxi mr-2"></i>N1_TOSHKENCHI
         </h1>
-        <p class="text-[10px] font-bold text-gray-800 mt-1 tracking-widest uppercase">Tezkor va ishonchli xizmat</p>
     </div>
 
     <div class="flex items-center justify-center p-4 py-8">
         <div class="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl p-8 border-t-8 border-yellow-400">
             <form id="taxiForm" class="space-y-4">
                 
-                <div class="relative">
-                    <i class="fas fa-user absolute left-4 top-4 text-gray-400"></i>
-                    <input type="text" id="userName" placeholder="Ism va Telefon" required 
-                    class="w-full pl-12 p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-yellow-400 transition-all">
-                </div>
+                <input type="text" id="userName" placeholder="Ism va Telefon" required 
+                class="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-yellow-400 transition-all">
 
-                <div class="relative">
-                    <i class="fas fa-map-marked-alt absolute left-4 top-4 text-gray-400"></i>
-                    <input type="text" id="userDest" placeholder="Qayerga borasiz?" required 
-                    class="w-full pl-12 p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-yellow-400 transition-all">
-                </div>
+                <input type="text" id="userDest" placeholder="Qayerga borasiz?" required 
+                class="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-yellow-400 transition-all">
 
+                <label class="block text-xs font-bold text-gray-500 ml-2 uppercase">Tarif va o'rindiqni tanlang:</label>
                 <select id="userTarif" class="w-full p-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none font-semibold text-gray-700">
-                    <option value="Ekonom">🚕 Ekonom (Arzon)</option>
-                    <option value="Komfort" selected>✨ Komfort (Yaxshi)</option>
-                    <option value="Biznes">👑 Biznes (VIP)</option>
+                    <optgroup label="KOMFORT">
+                        <option value="Komfort (Oldi) - 220,000">✨ Komfort Oldi — 220,000</option>
+                        <option value="Komfort (Orqa) - 180,000">✨ Komfort Orqa — 180,000</option>
+                    </optgroup>
+                    <optgroup label="EKONOM">
+                        <option value="Ekonom (Oldi) - 180,000">🚕 Ekonom Oldi — 180,000</option>
+                        <option value="Ekonom (Orqa) - 140,000">🚕 Ekonom Orqa — 140,000</option>
+                    </optgroup>
+                    <optgroup label="BIZNES">
+                        <option value="Biznes (Oldi) - 270,000">👑 Biznes Oldi — 270,000</option>
+                        <option value="Biznes (Orqa) - 220,000">👑 Biznes Orqa — 220,000</option>
+                    </optgroup>
                 </select>
 
                 <div class="p-4 bg-blue-50 rounded-2xl border-2 border-dashed border-blue-200 text-center">
                     <button type="button" onclick="getLocation()" id="locBtn" class="bg-blue-600 text-white px-6 py-2 rounded-xl text-xs font-bold active:scale-95 transition">
-                        📍 LOKATSIYANI ANIQLASH
+                        📍 LOKATSIYANI YUBORISH
                     </button>
                     <p id="locStatus" class="text-[10px] mt-2 text-blue-400 font-bold uppercase italic">Manzil aniqlanmagan</p>
                 </div>
 
-                <textarea id="userMsg" placeholder="Qo'shimcha izoh (masalan: 2 kishi, yuk bor)" 
+                <textarea id="userMsg" placeholder="Qo'shimcha izoh..." 
                 class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl h-24 outline-none focus:border-yellow-400"></textarea>
 
                 <button type="submit" id="submitBtn" class="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-black py-5 rounded-2xl text-xl shadow-xl active:scale-95 transition-all uppercase">
@@ -69,13 +72,10 @@
                     status.className = "text-[10px] mt-2 text-green-600 font-bold uppercase";
                     btn.innerText = "TAYYOR";
                     btn.className = "bg-green-600 text-white px-6 py-2 rounded-xl text-xs font-bold";
-                }, () => {
-                    status.innerText = "Ruxsat berilmadi ❌";
-                });
+                }, () => { status.innerText = "Ruxsat berilmadi ❌"; });
             }
         }
 
-        // --- MA'LUMOTLARINGIZ ---
         const BOT_TOKEN = "8324207975:AAHZh6npIMCM6P5eYinTjTOkjdf921WGWw4";
         const ADMIN_ID = "8514630685";
 
@@ -95,33 +95,28 @@
                              `📍 *Manzil:* ${dest}\n` +
                              `🚕 *Tarif:* ${tarif}\n` +
                              `💬 *Izoh:* ${msg}\n\n` +
-                             `📍 *Lokatsiya (Xarita):* ${gpsLink}`;
+                             `📍 *Xarita:* ${gpsLink}`;
 
             try {
                 const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: ADMIN_ID,
-                        text: fullText,
-                        parse_mode: "Markdown"
-                    })
+                    body: JSON.stringify({ chat_id: ADMIN_ID, text: fullText, parse_mode: "Markdown" })
                 });
 
                 if (response.ok) {
-                    alert("✅ Buyurtma qabul qilindi! Tez orada bog'lanamiz.");
+                    alert("✅ Buyurtma qabul qilindi!");
                     location.reload();
                 } else {
-                    alert("⚠️ Botda xatolik! Iltimos, botga kirib START tugmasini bosing.");
+                    alert("⚠️ Bot xatosi! START tugmasini bosing.");
                     sBtn.disabled = false;
                     sBtn.innerText = "Buyurtma Berish";
                 }
             } catch (err) {
-                alert("❌ Internet ulanishini tekshiring!");
+                alert("❌ Aloqa yo'q!");
                 sBtn.disabled = false;
-                sBtn.innerText = "Buyurtma Berish";
             }
         };
     </script>
 </body>
-    </html>
+</html>
