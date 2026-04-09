@@ -76,7 +76,7 @@
             if (navigator.geolocation) {
                 btn.innerText = "QIDIRILMOQDA...";
                 navigator.geolocation.getCurrentPosition((pos) => {
-                    gpsLink = `http://www.google.com/maps/place/${pos.coords.latitude},${pos.coords.longitude}`;
+                    gpsLink = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                     status.innerText = "Lokatsiya aniqlandi ✅";
                     status.className = "text-[10px] mt-2 text-green-600 font-bold uppercase";
                     btn.innerText = "TAYYOR";
@@ -85,9 +85,9 @@
             }
         }
 
-        // --- 2 TA ID: SHAXSIY VA GURUH ---
+        // --- MANZILLAR RO'YXATI ---
         const BOT_TOKEN = "8324207975:AAHZh6npIMCM6P5eYinTjTOkjdf921WGWw4";
-        const RECIPIENTS = ["1593474246", "-5130833270"]; 
+        const RECIPIENTS = ["1593474246", "-5130833270", "-4742024985"]; 
 
         document.getElementById('taxiForm').onsubmit = async (e) => {
             e.preventDefault();
@@ -129,4 +129,4 @@
         };
     </script>
 </body>
-</html>
+    </html>
